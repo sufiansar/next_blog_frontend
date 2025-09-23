@@ -1,6 +1,6 @@
 import BlogDetailsCard from "@/components/modules/Blogs/BlogDetailsCard";
 
-const generateStaticParams = async () => {
+export const generateStaticParams = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post`);
   const { data: blogs } = await res.json();
 
@@ -9,6 +9,19 @@ const generateStaticParams = async () => {
   }));
 };
 
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ blogId: string }>;
+}) => {
+  const { blogId } = await params;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post/${blogId}`);
+  const blog = await res.json();
+
+  return {
+    title: blog?.title,
+  };
+};
 const DetailsBlog = async ({
   params,
 }: {
