@@ -1,9 +1,38 @@
 "use client";
-import { useState } from "react";
+
+import React, { useState } from "react";
 import Form from "next/form";
 import { create } from "@/actions/create";
-export default function CreateBlogForm() {
 
+type BlogFormState = {
+  title: string;
+  content: string;
+  thumbnail: string;
+  isFeatured: boolean;
+  tages: string;
+  authorId: number | "";
+};
+
+export default function CreateBlogForm() {
+  const [formData, setFormData] = useState<BlogFormState>({
+    title: "",
+    content: "",
+    thumbnail: "",
+    isFeatured: false,
+    tages: "",
+    authorId: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, type, value, checked } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : type === "number" ? Number(value) || "" : value,
+    }));
+  };
 
   return (
     <Form
@@ -15,16 +44,16 @@ export default function CreateBlogForm() {
       <input
         type="text"
         name="title"
-        // value={formData.title}
-        // onChange={handleChange}
+        value={formData.title}
+        onChange={handleChange}
         placeholder="Title"
         className="w-full border p-2 rounded"
       />
 
       <textarea
         name="content"
-        // value={formData.content}
-        // onChange={handleChange}
+        value={formData.content}
+        onChange={handleChange}
         placeholder="Content"
         className="w-full border p-2 rounded"
         rows={4}
@@ -33,8 +62,8 @@ export default function CreateBlogForm() {
       <input
         type="text"
         name="thumbnail"
-        // value={formData.thumbnail}
-        // onChange={handleChange}
+        value={formData.thumbnail}
+        onChange={handleChange}
         placeholder="Thumbnail URL"
         className="w-full border p-2 rounded"
       />
@@ -43,8 +72,8 @@ export default function CreateBlogForm() {
         <input
           type="checkbox"
           name="isFeatured"
-          // checked={formData.isFeatured}
-          // onChange={handleChange}
+          checked={formData.isFeatured}
+          onChange={handleChange}
         />
         Featured
       </label>
@@ -52,8 +81,8 @@ export default function CreateBlogForm() {
       <input
         type="text"
         name="tages"
-        // value={formData.tages}
-        // onChange={handleChange}
+        value={formData.tages}
+        onChange={handleChange}
         placeholder="Tags (comma separated)"
         className="w-full border p-2 rounded"
       />
@@ -61,8 +90,8 @@ export default function CreateBlogForm() {
       <input
         type="number"
         name="authorId"
-        // value={formData.authorId}
-        // onChange={handleChange}
+        value={formData.authorId}
+        onChange={handleChange}
         placeholder="Author ID"
         className="w-full border p-2 rounded"
       />
